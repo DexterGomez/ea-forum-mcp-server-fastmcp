@@ -71,6 +71,36 @@ The server finds relevant posts about AI safety evaluation, mental health interv
 
 ![Enhanced Hackathon Proposal](images/example_advanced_usage_2_image_2.png)
 
+### Advanced Usage 3: Consuming the Service via HTTP
+
+To consume the service via an HTTP connection, run the following command from the project's root directory:
+
+```Bash
+python -m src.httpService
+```
+Once the service is running, you can use any tool you prefer to create a client for the MCP. Here is an example using LangChain and LangGraph:
+
+```Python
+from langchain_mcp_adapters.client import MultiServerMCPClient  
+from langgraph.prebuilt import create_react_agent
+
+# Initialize the client to connect to the running MCP service  
+client = MultiServerMCPClient(  
+    {"EA Forum MCP": {"url": "http://localhost:8010/mcp/", "transport": "streamable_http"}}  
+)
+
+# Your preferred LLM service  
+llm = ...
+
+# Get the tools from the MCP and create an agent that can use them  
+tools = await client.get_tools()  
+agent = create_react_agent(llm, tools)
+
+# Invoke the agent with your question  
+await agent.ainvoke(  
+    {"messages": [{"role": "user", "content": "Is there any post at the EA Forum MCP?"}]}  
+)  
+```
 ## Usage
 
 ### Running the Server
@@ -159,7 +189,7 @@ To use this server with an MCP client, add it to your client's configuration:
   "mcpServers": {
     "ea-forum": {
       "command": "python",
-      "args": ["-m", "src.server"],
+      "args": ["-m", "src.stdioServer"],
       "cwd": "/path/to/ea-forum-mcp-server",
       "env": {
         "PYTHONPATH": "/path/to/ea-forum-mcp-server"
