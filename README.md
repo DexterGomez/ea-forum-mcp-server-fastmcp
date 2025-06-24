@@ -98,7 +98,7 @@ agent = create_react_agent(llm, tools)
 
 # Invoke the agent with your question  
 await agent.ainvoke(  
-    {"messages": [{"role": "user", "content": "Is there any post at the EA Forum MCP?"}]}  
+    {"messages": [{"role": "user", "content": "Is there any post at the EA Forum about an MCP?"}]}  
 )  
 ```
 ## Usage
@@ -106,7 +106,7 @@ await agent.ainvoke(
 ### Running the Server
 
 ```bash
-python -m src.server
+python -m src.stdioServer
 ```
 
 ### Available Tools
